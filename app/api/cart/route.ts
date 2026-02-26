@@ -4,6 +4,7 @@ import { verifyToken } from "@/lib/jwt";
 import { ok, err } from "@/lib/api";
 import { Cart } from "@/models/Cart";
 import { Product } from "@/models/Product";
+import { Seller } from "@/models/Seller"; // Fix MissingSchemaError during populate
 
 function getUser(req: NextRequest) {
   const token = req.cookies.get("jh_token")?.value;

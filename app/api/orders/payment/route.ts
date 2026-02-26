@@ -82,7 +82,7 @@ export async function POST(req: NextRequest) {
                 customer_name: address.name || "Customer"
             },
             order_meta: {
-                return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/checkout/verify?order_id=ORDER_${orderIdStr}`
+                return_url: `${process.env.NEXT_PUBLIC_BASE_URL || "https://www.jhuggee.com"}/checkout/verify?order_id=ORDER_${orderIdStr}`
             }
         };
 
