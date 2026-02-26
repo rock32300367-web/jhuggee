@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     if (!userPayload) return err("Unauthorized", 401);
 
     await connectDB();
-    const user = await User.findById(userPayload.userId).lean();
+    const user = await User.findById(userPayload.userId).lean() as any;
     if (!user) return err("User not found", 404);
 
     return ok(user.address || []);
