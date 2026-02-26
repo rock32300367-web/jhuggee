@@ -6,7 +6,7 @@ import { User } from "@/models/User";
 export async function GET(req: NextRequest) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
   const { searchParams } = new URL(req.url);
-  const code  = searchParams.get("code");
+  const code = searchParams.get("code");
   const error = searchParams.get("error");
 
   if (error || !code) return Response.redirect(`${baseUrl}/login?error=google_cancelled`);
@@ -17,16 +17,16 @@ export async function GET(req: NextRequest) {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         code,
-        client_id:     process.env.GOOGLE_CLIENT_ID!,
+        client_id: process.env.GOOGLE_CLIENT_ID!,
         client_secret: process.env.GOOGLE_CLIENT_SECRET!,
-        redirect_uri:  `${baseUrl}/api/auth/google/callback`,
-        grant_type:    "authorization_code",
+        redirect_uri: `${baseUrl}/api/auth/google/callback`,
+        grant_type: "authorization_code",
       }),
     });
     const tokenData = await tokenRes.json();
     if (!tokenData.access_token) throw new Error("Token exchange failed");
 
-    const userRes  = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+    const userRes = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
       headers: { Authorization: `Bearer ${tokenData.access_token}` },
     });
     const gUser = await userRes.json();
@@ -52,11 +52,13 @@ export async function GET(req: NextRequest) {
       phone: user.phone, role: user.role, avatar: user.avatar,
     }));
 
+    const domainAttr = process.env.NODE_ENV === "production" ? "; Domain=.jhuggee.com" : "";
+
     return new Response(null, {
       status: 302,
       headers: {
-        "Set-Cookie": `jh_token=${token}; HttpOnly; Path=/; Max-Age=604800; SameSite=Lax`,
-        "Location":   `${baseUrl}/auth/google-success?user=${userData}`,
+        "Set-Cookie": `jh_token=${token}; HttpOnly; Path=/; Max-Age=604800; SameSite=Lax${domainAttr}`,
+        "Location": `${baseUrl}/auth/google-success?user=${userData}`,
       },
     });
   } catch (e) {
