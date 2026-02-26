@@ -66,7 +66,7 @@ export default function Header() {
 
           {/* Actions */}
           <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-            <Link href={process.env.NODE_ENV === "production" ? "https://sellers.jhuggee.com/dashboard" : "http://sellers.localhost:3000/dashboard"} className="hidden md:flex flex-col items-center px-3 py-1 rounded-lg hover:bg-gray-50 transition-colors">
+            <Link href={process.env.NODE_ENV === "production" ? "https://sellers.jhuggee.com/dashboard" : "http://sellers.localhost:3000/dashboard"} target="_blank" rel="noopener noreferrer" className="hidden md:flex flex-col items-center px-3 py-1 rounded-lg hover:bg-gray-50 transition-colors">
               <Store size={22} className="text-indigo-900" />
               <span className="text-xs text-gray-500 mt-0.5 font-semibold">Sell</span>
             </Link>
@@ -148,7 +148,7 @@ export default function Header() {
               {["Home", "Orders", "Cart", "Profile"].map(l => (
                 <Link key={l} href={l === "Home" ? "/" : `/${l.toLowerCase()}`} onClick={() => setMenuOpen(false)} className="block px-3 py-2.5 rounded-lg hover:bg-orange-50 font-medium text-gray-700">{l}</Link>
               ))}
-              <Link href={process.env.NODE_ENV === "production" ? "https://sellers.jhuggee.com/dashboard" : "http://sellers.localhost:3000/dashboard"} onClick={() => setMenuOpen(false)} className="block px-3 py-2.5 rounded-lg hover:bg-orange-50 font-medium text-gray-700">🏪 Sell on Jhuggee</Link>
+              <Link href={process.env.NODE_ENV === "production" ? "https://sellers.jhuggee.com/dashboard" : "http://sellers.localhost:3000/dashboard"} target="_blank" rel="noopener noreferrer" onClick={() => setMenuOpen(false)} className="block px-3 py-2.5 rounded-lg hover:bg-orange-50 font-medium text-gray-700">🏪 Sell on Jhuggee</Link>
               {user && <button onClick={handleLogout} className="w-full text-left px-3 py-2.5 rounded-lg text-red-500 font-medium hover:bg-red-50">Logout</button>}
             </div>
             <p className="text-[10px] uppercase tracking-widest text-gray-400 font-bold px-3 mb-2">Categories</p>

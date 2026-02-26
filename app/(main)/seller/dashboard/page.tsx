@@ -27,7 +27,13 @@ export default function SellerDashboard() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
-    if (!user) { router.push("/login"); return; }
+    if (!user) {
+      if (typeof window !== "undefined") {
+        const baseUrl = process.env.NODE_ENV === "production" ? "https://www.jhuggee.com" : "http://localhost:3000";
+        window.location.href = `${baseUrl}/login`;
+      }
+      return;
+    }
     fetchProducts();
   }, [user]);
 
