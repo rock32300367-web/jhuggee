@@ -6,6 +6,8 @@ import { Seller } from "@/models/Seller"; // Pre-load schema for .populate()
 import { User } from "@/models/User"; // Pre-load schema because Seller refs User
 import { SortOrder } from "mongoose";
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: NextRequest) {
   try {
     await connectDB();
