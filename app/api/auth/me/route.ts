@@ -27,17 +27,32 @@ export async function GET(req: NextRequest) {
         }
 
         // Return user data (matching the structure sent on login)
-        return ok({
-            user: {
-                id: user._id,
-                email: user.email,
-                phone: user.phone,
-                name: user.name,
-                role: user.role,
-                authProvider: user.authProvider,
-                address: user.address,
+        const response = NextResponse.json({
+            success: true,
+            data: {
+                user: {
+                    id: user._id,
+                    email: user.email,
+                    phone: user.phone,
+                    name: user.name,
+                    role: user.role,
+                    authProvider: user.authProvider,
+                    address: user.address,
+                }
             }
         });
+
+        // Re-issue the cookie to upgrade any "host-only" cookies to subdomain-wide cookies
+        response.cookies.set("jh_token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            maxAge: 60 * 60 * 24 * 7,
+            path: "/",
+            domain: process.env.NODE_ENV === "production" ? ".jhuggee.com" : undefined,
+        });
+
+        return response;
     } catch (e: any) {
         console.error("Auth Me Error:", e);
         return err("Server error", 500);

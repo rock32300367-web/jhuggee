@@ -1,5 +1,5 @@
 "use client";
-import { useState, Suspense } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
@@ -11,7 +11,14 @@ import Input from "@/components/ui/Input";
 function SellerLoginContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const { setUser } = useAuth();
+    const { user, setUser } = useAuth();
+
+    useEffect(() => {
+        if (user) {
+            router.push("/seller/dashboard");
+        }
+    }, [user, router]);
+
     type AuthMode = "phone" | "email";
     const [authMode, setAuthMode] = useState<AuthMode>("phone");
     const [step, setStep] = useState<"phone" | "otp">("phone");

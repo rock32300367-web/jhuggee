@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import axios from "axios";
@@ -12,7 +12,14 @@ type Step = "details" | "otp";
 
 export default function SignupPage() {
   const router = useRouter();
-  const { setUser } = useAuth();
+  const { user, setUser } = useAuth();
+
+  useEffect(() => {
+    if (user) {
+      router.push("/");
+    }
+  }, [user, router]);
+
   type AuthMode = "phone" | "email";
   const [authMode, setAuthMode] = useState<AuthMode>("phone");
   const [step, setStep] = useState<Step>("details");

@@ -26,19 +26,36 @@ export default function SellerDashboard() {
   const [deleteId, setDeleteId] = useState<string | null>(null);     // confirm modal
   const [deleting, setDeleting] = useState(false);
 
+  const [isReady, setIsReady] = useState(false);
+
   useEffect(() => {
-    // Wait until AuthContext finishes checking the session API
+    // Wait for the AuthContext to finish checking the session
     if (loadingAuth) return;
 
-    if (!user) {
-      if (typeof window !== "undefined") {
-        const baseUrl = process.env.NODE_ENV === "production" ? "https://www.jhuggee.com" : "http://localhost:3000";
-        window.location.href = `${baseUrl}/login`;
+    // After loadingAuth becomes false, we wait a tiny bit to see if user is populated
+    const timer = setTimeout(() => {
+      if (!user) {
+        if (typeof window !== "undefined") {
+          const baseUrl = process.env.NODE_ENV === "production" ? "https://www.jhuggee.com" : "http://localhost:3000";
+          window.location.href = `${baseUrl}/login`;
+        }
+      } else {
+        setIsReady(true);
+        fetchProducts();
       }
-      return;
-    }
-    fetchProducts();
+    }, 100);
+
+    return () => clearTimeout(timer);
   }, [user, loadingAuth]);
+
+  // If not ready or still loading auth, show spinner
+  if (!isReady || loadingAuth) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
+      </div>
+    );
+  }
 
   const fetchProducts = async () => {
     try {
@@ -131,11 +148,7 @@ export default function SellerDashboard() {
     { id: "add", label: editId ? "✏️ Edit Product" : "➕ Add Product" },
   ] as const;
 
-  if (loading) return (
-    <div className="flex items-center justify-center min-h-[60vh]">
-      <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin" />
-    </div>
-  );
+
 
   return (
     <div className="max-w-[1600px] mx-auto px-3 sm:px-4 py-4 sm:py-6 overflow-x-hidden">

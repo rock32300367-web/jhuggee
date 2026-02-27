@@ -2,6 +2,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+axios.defaults.withCredentials = true;
 
 interface User {
   id: string;
@@ -45,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // 2. Always fetch fresh session from server using httpOnly cookie
     // This handles cross-subdomain logins where LocalStorage is empty but the cookie exists
-    axios.get("/api/auth/me")
+    axios.get("/api/auth/me", { withCredentials: true })
       .then((res) => {
         const freshUser = res.data?.data?.user;
         if (freshUser) {
