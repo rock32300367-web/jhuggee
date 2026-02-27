@@ -37,12 +37,32 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [cartCount, setCartCount] = useState(0);
 
   useEffect(() => {
-    // Load user from localStorage (saved after login)
+    // 1. Try to load user from localStorage for instant UI rendering
     const saved = localStorage.getItem("jh_user");
     if (saved) {
       try { setUser(JSON.parse(saved)); } catch { }
     }
-    setLoading(false);
+
+    // 2. Always fetch fresh session from server using httpOnly cookie
+    // This handles cross-subdomain logins where LocalStorage is empty but the cookie exists
+    axios.get("/api/auth/me")
+      .then((res) => {
+        const freshUser = res.data?.data?.user;
+        if (freshUser) {
+          setUser(freshUser);
+          localStorage.setItem("jh_user", JSON.stringify(freshUser));
+        }
+      })
+      .catch((err) => {
+        // If the server says we are unauthorized or token expired, clear state
+        if (err.response?.status === 401 || err.response?.status === 404) {
+          setUser(null);
+          localStorage.removeItem("jh_user");
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
 
   useEffect(() => {

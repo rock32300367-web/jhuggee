@@ -14,7 +14,7 @@ const CATEGORIES = ["Sarees", "Kurtis", "Men's Wear", "Kids", "Footwear", "Elect
 const EMPTY_FORM = { name: "", description: "", category: "", price: "", mrp: "", stock: "", images: "", sizes: "", colors: "", tags: "", freeDelivery: true, deliveryDays: "5" };
 
 export default function SellerDashboard() {
-  const { user, setUser } = useAuth();
+  const { user, setUser, loading: loadingAuth } = useAuth();
   const router = useRouter();
   const [tab, setTab] = useState<"dashboard" | "products" | "add">("dashboard");
   const [products, setProducts] = useState<any[]>([]);
@@ -27,6 +27,9 @@ export default function SellerDashboard() {
   const [deleting, setDeleting] = useState(false);
 
   useEffect(() => {
+    // Wait until AuthContext finishes checking the session API
+    if (loadingAuth) return;
+
     if (!user) {
       if (typeof window !== "undefined") {
         const baseUrl = process.env.NODE_ENV === "production" ? "https://www.jhuggee.com" : "http://localhost:3000";
@@ -35,7 +38,7 @@ export default function SellerDashboard() {
       return;
     }
     fetchProducts();
-  }, [user]);
+  }, [user, loadingAuth]);
 
   const fetchProducts = async () => {
     try {
