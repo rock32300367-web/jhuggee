@@ -37,7 +37,6 @@ export default function SignupPage() {
       if (!/^[6-9]\d{9}$/.test(phone)) errs.phone = "Enter a valid 10-digit number";
     } else {
       if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) errs.email = "Enter a valid email";
-      if (password.length < 6) errs.password = "Password must be at least 6 characters";
     }
 
     if (Object.keys(errs).length) { setErrors(errs); return; }
@@ -61,7 +60,8 @@ export default function SignupPage() {
   };
 
   const verifyOTP = async () => {
-    if (otp.length !== 6) { setErrors({ otp: "Enter 6-digit OTP" }); return; }
+    if (otp.length !== 6) { setErrors(prev => ({ ...prev, otp: "Enter 6-digit OTP" })); return; }
+    if (authMode === "email" && password.length < 6) { setErrors(prev => ({ ...prev, password: "Password must be at least 6 characters" })); return; }
     setLoading(true);
     try {
       let res;
@@ -112,10 +112,7 @@ export default function SignupPage() {
           {authMode === "phone" ? (
             <Input label="Mobile Number" prefix="+91" type="tel" maxLength={10} value={phone} onChange={e => { setPhone(e.target.value.replace(/\D/g, "")); setErrors(prev => ({ ...prev, phone: "" })) }} placeholder="9876543210" error={errors.phone} />
           ) : (
-            <>
-              <Input label="Email Address" type="email" value={email} onChange={e => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: "" })) }} placeholder="rahul@example.com" error={errors.email} />
-              <Input label="Password" type="password" value={password} onChange={e => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: "" })) }} placeholder="At least 6 characters" error={errors.password} />
-            </>
+            <Input label="Email Address" type="email" value={email} onChange={e => { setEmail(e.target.value); setErrors(prev => ({ ...prev, email: "" })) }} placeholder="rahul@example.com" error={errors.email} />
           )}
 
           <Button onClick={sendOTP} loading={loading} fullWidth size="lg">Send OTP →</Button>
@@ -140,12 +137,16 @@ export default function SignupPage() {
             <label className="block text-sm font-semibold text-gray-700 mb-2">6-Digit OTP</label>
             <input
               type="tel" maxLength={6} value={otp}
-              onChange={e => setOtp(e.target.value.replace(/\D/g, ""))}
+              onChange={e => { setOtp(e.target.value.replace(/\D/g, "")); setErrors(prev => ({ ...prev, otp: "" })); }}
               placeholder="• • • • • •"
               className="w-full text-center text-2xl font-bold tracking-[0.5em] border-2 border-gray-200 rounded-xl py-4 outline-none focus:border-orange-400 bg-orange-50/40 transition-all"
             />
             {errors.otp && <p className="mt-1 text-xs text-red-500">{errors.otp}</p>}
           </div>
+
+          {authMode === "email" && (
+            <Input label="Create Password" type="password" value={password} onChange={e => { setPassword(e.target.value); setErrors(prev => ({ ...prev, password: "" })) }} placeholder="At least 6 characters" error={errors.password} />
+          )}
 
           <Button onClick={verifyOTP} loading={loading} fullWidth size="lg">Create Account ✓</Button>
 
