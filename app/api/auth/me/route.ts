@@ -4,8 +4,6 @@ import { connectDB } from "@/lib/db";
 import { ok, err } from "@/lib/api";
 import { User } from "@/models/User";
 
-export const dynamic = "force-dynamic";
-
 export async function GET(req: NextRequest) {
     try {
         const token = req.cookies.get("jh_token")?.value;

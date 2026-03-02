@@ -116,7 +116,7 @@ function SellerLoginContent() {
                 <div className="space-y-4">
                     {/* Google Button */}
                     <button
-                        onClick={() => { setGLoading(true); if (typeof window !== "undefined") window.location.assign("/api/auth/google"); }}
+                        onClick={() => { setGLoading(true); window.location.assign("/api/auth/google"); }}
                         disabled={gLoading}
                         className="w-full flex items-center justify-center gap-3 border-2 border-gray-200 rounded-xl py-3 px-4 hover:bg-gray-50 hover:border-gray-300 transition-all font-semibold text-gray-700 text-sm disabled:opacity-60"
                     >

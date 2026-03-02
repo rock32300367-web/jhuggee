@@ -3,7 +3,6 @@ import { Baloo_2, Hind } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
-import Chatbot from "@/components/Chatbot";
 
 const baloo = Baloo_2({
   subsets: ["latin"],
@@ -43,7 +42,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               },
             }}
           />
-          <Chatbot />
         </AuthProvider>
       </body>
     </html>

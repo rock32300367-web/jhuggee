@@ -163,7 +163,7 @@ export default function CheckoutPage() {
                 // 3. Launch Cashfree SDK Modal & define return URL
                 let checkoutOptions = {
                     paymentSessionId: resData.data.payment_session_id,
-                    returnUrl: typeof window !== "undefined" ? `${window.location.origin}/payment/verify?order_id={order_id}` : ""
+                    returnUrl: `${window.location.origin}/payment/verify?order_id={order_id}`
                 };
 
                 cashfree.checkout(checkoutOptions);
