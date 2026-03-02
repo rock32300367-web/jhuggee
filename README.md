@@ -17,6 +17,7 @@ An e-commerce web application built using Next.js, and MongoDB, integrating feat
 - ✅ Category Pages with Filter/Sort
 - ✅ Seller Dashboard (Add/Edit/Delete Products)
 - ✅ Cart & Orders
+- ✅ AI Customer Support Chatbot (Gemini API)
 - ✅ Fully Responsive (Mobile/Tablet/Desktop)
 
 ## Quick Start
@@ -40,6 +41,10 @@ GOOGLE_CLIENT_SECRET=your_client_secret_here
 CASHFREE_APP_ID=your_cashfree_app_id
 CASHFREE_SECRET_KEY=your_cashfree_secret_key
 CASHFREE_ENV=SANDBOX
+
+# Required: AI Chatbot (Gemini + n8n webhook)
+CHATBOT_GEMINI_KEY=your_gemini_api_key
+N8N_WEBHOOK_URL=your_n8n_webhook_url
 ```
 
 ### 3. Seed Database with Initial Data
