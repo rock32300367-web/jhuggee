@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Baloo_2, Hind } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/context/AuthContext";
+import Chatbot from "@/components/Chatbot";
 import "./globals.css";
 
 const baloo = Baloo_2({
@@ -42,6 +43,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               },
             }}
           />
+          <Chatbot />
         </AuthProvider>
       </body>
     </html>
